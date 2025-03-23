@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: AudioBook
+  # MySQL database connection settings
+  datasource:
+    url: jdbc:mysql://localhost:3306/audio_book
+    username: root
+    password: quangminh1
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # Hibernate settings (optional)
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
