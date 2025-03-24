@@ -9,20 +9,25 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "users")
+@Table(name = "favorite_lists", schema = "audio_book")
 public class FavoriteList {
     @Id
+    @Column(name = "id", nullable = false, length = 16)
     @GeneratedValue
     @UuidGenerator
     UUID id;
 
-    @ManyToOne
+    @Column(name = "name", nullable = false)
+    String name;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    String name;
 }

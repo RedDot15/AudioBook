@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -16,33 +15,22 @@ import java.util.UUID;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "rating", schema = "audio_book")
-public class Rating {
+@Table(name = "book_pages", schema = "audio_book")
+public class BookPage {
     @Id
     @Column(name = "id", nullable = false, length = 16)
     @GeneratedValue
     @UuidGenerator
     UUID id;
 
-    @Column(name = "comment", length = 75)
-    String comment;
+    @Column(name = "page_number", nullable = false)
+    Integer pageNumber;
 
-    @Column(name = "created_at", nullable = false)
-    Instant createdAt;
-
-    @Column(name = "rating", nullable = false)
-    Integer rating;
+    @Column(name = "text_content", nullable = false)
+    String textContent;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "audio_book_id", nullable = false)
     AudioBook audioBook;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    User user;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = Instant.now();
-    }
 }

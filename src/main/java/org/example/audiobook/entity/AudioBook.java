@@ -1,6 +1,5 @@
 package org.example.audiobook.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,41 +9,53 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "users")
+@Table(name = "audio_books", schema = "audio_book")
 public class AudioBook {
     @Id
+    @Column(name = "id", nullable = false, length = 16)
     @GeneratedValue
     @UuidGenerator
     UUID id;
 
-    @ManyToOne
-    User user;
-
-    @ManyToOne
-    Category category;
-
+    @Column(name = "title", nullable = false, length = 50)
     String title;
 
+    @Column(name = "author", nullable = false, length = 50)
     String author;
 
-    String description;
-
-    String coverImage;
-
+    @Column(name = "published_year", nullable = false)
     Integer publishedYear;
 
+    @Column(name = "description", length = 100)
+    String description;
+
+    @Column(name = "cover_image", nullable = false, length = 125)
+    String coverImage;
+
+    @Column(name = "is_free", nullable = false)
     Boolean isFree;
 
-    String textContent;
+    @Column(name = "duration", nullable = false)
+    Integer duration;
 
-    String maleAudioUrl;
-
+    @Column(name = "female_audio_url", nullable = false, length = 125)
     String femaleAudioUrl;
 
-    Integer duration;
+    @Column(name = "male_audio_url", nullable = false, length = 125)
+    String maleAudioUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    User user;
+
 }
