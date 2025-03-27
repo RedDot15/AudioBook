@@ -23,19 +23,13 @@ cd AudioBook
 
 ### 2. Configure the Database
 
-1. Create a new MySQL database:
-
-   ```
-    CREATE DATABASE audiobook_db;
-   ```
-
-3. Import the schema from src/main/resources/db/migration/schema/Dump20250324.sql:
+1. Import the schema from src/main/resources/db/migration/schema/Dump20250324.sql:
    
    ```
-    mysql -u <username> -p audio_book < src/main/resources/db/migration/schema/Dump20250324.sql
+    mysql -u <username> -p < src/main/resources/db/migration/schema/Dump20250324.sql
    ```
    
-3. Update database credentials in src/main/resources/application.properties:
+2. Update database credentials in src/main/resources/application.properties:
 
    ```
     spring.datasource.url=jdbc:mysql://localhost:3306/audio_book
