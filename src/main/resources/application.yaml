@@ -21,6 +21,12 @@ spring:
 api:
   prefix: /api/v1
 
+jwt:
+  expiration: 2592000 #30 days = 30 * 24 * 60 * 60
+  secretKey: OTIGATj1p/KdUgFr2tPN2cNpqiPdM/6kh62+EzqJ8X8=
+#  expiration-refresh-token: 5184000
+
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
