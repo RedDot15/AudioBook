@@ -5,10 +5,28 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/audio_book
     username: root
-    password: quangminh1
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   # Hibernate settings (optional)
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: validate
+  # Multipart file upload settings
+  servlet:
+    multipart:
+      max-file-size: 10MB       # Giới hạn kích thước tối đa của một file
+      max-request-size: 10MB    # Giới hạn kích thước tối đa của request
+  # Static resources settings
+  web:
+    resources:
+      static-locations:         # Danh sách các thư mục tĩnh
+        - file:uploads/         # Thư mục uploads trong hệ thống tệp
+        - classpath:/static/    # Thư mục static trong resources
+
+  springdoc:
+    api-docs:
+      path: /api-docs
+    swagger-ui:
+      path: /swagger-ui.html
+      enabled: true
