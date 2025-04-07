@@ -1,6 +1,8 @@
 package org.example.audiobook.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.UuidGenerator;
@@ -34,6 +36,9 @@ public class User {
     @Column(name = "hashed_password", nullable = false)
     String hashedPassword;
 
+    @Column(name = "role", nullable = false, length = 45)
+    String role;
+
     @Column(name = "prenium_expiry")
     Instant preniumExpiry;
 
@@ -45,6 +50,7 @@ public class User {
 
     @PrePersist
     protected void onCreate() {
+        if (role == null) role = "USER";
         preniumStatus = false;
         createdAt = Instant.now();
     }

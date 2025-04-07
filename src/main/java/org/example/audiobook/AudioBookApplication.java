@@ -1,8 +1,5 @@
 package org.example.audiobook;
 
-import org.example.audiobook.entity.*;
-import org.example.audiobook.repository.*;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
