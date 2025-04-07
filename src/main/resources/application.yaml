@@ -3,12 +3,19 @@ spring:
     name: AudioBook
   # MySQL database connection settings
   datasource:
-    url: jdbc:mysql://localhost:3306/audio_book
-    username: root
-    password: quangminh1
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER}
   # Hibernate settings (optional)
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: validate
+  config:
+    import: env.properties
+
+jwt:
+  signer-key: ${SIGNER_KEY}
+  valid-duration: 3600 # in second
+  refreshable-duration: 36000 # in seconds
