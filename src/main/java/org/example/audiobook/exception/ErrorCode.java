@@ -19,7 +19,7 @@ public enum ErrorCode {
 	// Authentication
 	UNAUTHENTICATED(HttpStatus.UNAUTHORIZED, "Unauthenticated error."),
 	UNAUTHORIZED(HttpStatus.FORBIDDEN, "You do not have permission to perform this operation."),
-	;
+	NOT_FOUND(HttpStatus.NOT_FOUND, "Information not found." ),;
 
 	HttpStatus httpStatus;
 	String message;
