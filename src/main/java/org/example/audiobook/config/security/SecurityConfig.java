@@ -33,7 +33,10 @@ public class SecurityConfig {
 
 	String[] PUBLIC_ENDPOINTS = {
 		"/auth/token/get",
-			"/api/audiobooks/getAll"
+			"/api/audiobooks/getAll",
+			"api/category/getAll",
+			"/images/**",
+			"/audio/**"
 	};
 
 	@NonFinal
