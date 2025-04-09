@@ -34,13 +34,13 @@ public class JwtTokenUtils {
         claims.put("email", user.getEmail());
         claims.put("userId", user.getId());
         try {
-            String token = Jwts.builder()
+            //how to extract claims from this ?
+            return Jwts.builder()
                     .setClaims(claims) //how to extract claims from this ?
                     .setSubject(user.getEmail())
                     .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
-            return token;
         }catch (Exception e) {
             //you can "inject" Logger, instead System.out.println
             throw new InvalidParamException("Cannot create jwt token, error: "+e.getMessage());
@@ -52,7 +52,7 @@ public class JwtTokenUtils {
         //Keys.hmacShaKeyFor(Decoders.BASE64.decode("TaqlmGv1iEDMRiFp/pHuID1+T84IABfuA0xXh4GhiUI="));
         return Keys.hmacShaKeyFor(bytes);
     }
-    public String generateSecretKey() {
+    private String generateSecretKey() {
         SecureRandom random = new SecureRandom();
         byte[] keyBytes = new byte[32]; // 256-bit key
         random.nextBytes(keyBytes);
