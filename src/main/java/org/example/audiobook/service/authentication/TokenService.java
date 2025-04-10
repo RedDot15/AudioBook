@@ -55,7 +55,7 @@ public class TokenService {
 		Date expirationTime = Date.from(Instant.now().plus(duration, ChronoUnit.SECONDS));
 		// Define Body: ClaimSet
 		JWTClaimsSet.Builder claimsBuilder = new JWTClaimsSet.Builder()
-				.subject(user.getUsername())
+				.subject(user.getId().toString())
 				.issuer("reddot15.com")
 				.issueTime(new Date())
 				.expirationTime(expirationTime)
