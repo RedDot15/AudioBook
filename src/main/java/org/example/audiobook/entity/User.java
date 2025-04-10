@@ -1,14 +1,13 @@
 package org.example.audiobook.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -27,7 +26,7 @@ public class User {
     @UuidGenerator
     UUID id;
 
-    @Column(name = "username", nullable = false, length = 50)
+    @Column(name = "username", length = 50)
     String username;
 
     @Column(name = "email", nullable = false, length = 50)
@@ -38,6 +37,9 @@ public class User {
 
     @Column(name = "role", nullable = false, length = 45)
     String role;
+
+    @Column(name = "date_of_birth")
+    LocalDate dateOfBirth;
 
     @Column(name = "prenium_expiry")
     Instant preniumExpiry;
