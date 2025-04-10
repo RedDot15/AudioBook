@@ -47,7 +47,7 @@ public class AuthenticationService {
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
 		// Fetch
 		User user = userRepository
-				.findByUsername(request.getUsername())
+				.findByEmail(request.getEmail())
 				.orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 		// Authenticate
 		boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getHashedPassword());
