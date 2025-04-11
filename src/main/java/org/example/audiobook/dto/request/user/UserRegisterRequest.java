@@ -22,9 +22,8 @@ public class UserRegisterRequest {
 	@NotBlank(message = "Password is required.")
 	String password;
 
-	@NotNull(message = "dateOfBirth is required.")
+	@NotNull(message = "Date of birth is required.")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	LocalDate dateOfBirth;
-
 
 }
