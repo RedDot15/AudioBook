@@ -2,7 +2,7 @@
 package org.example.audiobook.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.audiobook.dto.response.AudioBookResponseDTO;
+import org.example.audiobook.dto.response.AudioBookResponse;
 import org.example.audiobook.dto.response.PageResponse;
 import org.example.audiobook.helper.ResponseObject;
 import org.example.audiobook.service.audiobook.AudioBookService;
@@ -24,7 +24,7 @@ public class AudioBookController {
     public ResponseEntity<ResponseObject> getAll(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
-        PageResponse<AudioBookResponseDTO> response = audioBookService.getAll(page, size);
+        PageResponse<AudioBookResponse> response = audioBookService.getAll(page, size);
         return buildResponse(org.springframework.http.HttpStatus.OK, "Get all audiobooks successfully", response);
     }
 
@@ -33,7 +33,7 @@ public class AudioBookController {
             @PathVariable UUID categoryId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
-        PageResponse<AudioBookResponseDTO> response = audioBookService.getByCategoryId(categoryId, page, size);
+        PageResponse<AudioBookResponse> response = audioBookService.getByCategoryId(categoryId, page, size);
         return buildResponse(org.springframework.http.HttpStatus.OK,
                 "Get audiobooks by category successfully", response);
     }
@@ -43,8 +43,18 @@ public class AudioBookController {
             @PathVariable UUID userId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
-        PageResponse<AudioBookResponseDTO> response = audioBookService.getByUserId(userId, page, size);
+        PageResponse<AudioBookResponse> response = audioBookService.getByUserId(userId, page, size);
         return buildResponse(org.springframework.http.HttpStatus.OK,
                 "Get audiobooks by user successfully", response);
     }
+
+    @GetMapping("/{audioBookId}")
+    public ResponseEntity<ResponseObject> getByUserId(
+            @PathVariable UUID audioBookId) {
+        AudioBookResponse response = audioBookService.getById(audioBookId);
+        return buildResponse(org.springframework.http.HttpStatus.OK,
+                "Get audiobooks by user successfully", response);
+    }
+
+
 }

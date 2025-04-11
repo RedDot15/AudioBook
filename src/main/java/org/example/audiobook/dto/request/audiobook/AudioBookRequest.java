@@ -10,16 +10,26 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AudioBookRequestDTO {
+public class AudioBookRequest {
     String title;
+
     String author;
+
     Integer publishedYear;
+
     String description;
+
     String coverImage;
+
     Boolean isFree;
+
     Integer duration;
+
     String femaleAudioUrl;
+
     String maleAudioUrl;
+
     UUID categoryId;
+
     UUID userId;
 }
