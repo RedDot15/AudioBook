@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.audiobook.dto.response.AudioBookResponse;
 import org.example.audiobook.dto.response.PageResponse;
 import org.example.audiobook.helper.ResponseObject;
-import org.example.audiobook.service.audiobook.AudioBookService;
+import org.example.audiobook.service.AudioBookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
