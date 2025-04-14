@@ -15,16 +15,19 @@ import java.util.UUID;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "book_pages", schema = "audio_book")
-public class BookPage {
+@Table(name = "book_chapters", schema = "audio_book")
+public class BookChapter {
     @Id
     @Column(name = "id", nullable = false, length = 16)
     @GeneratedValue
     @UuidGenerator
     UUID id;
 
-    @Column(name = "page_number", nullable = false)
-    Integer pageNumber;
+    @Column(name = "title", nullable = false, length = 45)
+    String title;
+
+    @Column(name = "chapter_number", nullable = false)
+    Integer chapterNumber;
 
     @Column(name = "text_content", nullable = false)
     String textContent;
