@@ -14,13 +14,13 @@ import java.util.UUID;
 import static org.example.audiobook.helper.ResponseBuilder.buildResponse;
 
 @RestController
-@RequestMapping("/api/audiobooks")
+@RequestMapping("/api/audio-book")
 @RequiredArgsConstructor
 public class AudioBookController {
 
     private final AudioBookService audioBookService;
 
-    @GetMapping("/getAll")
+    @GetMapping("/")
     public ResponseEntity<ResponseObject> getAll(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
