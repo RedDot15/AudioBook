@@ -20,11 +20,11 @@ import static org.example.audiobook.helper.ResponseBuilder.buildResponse;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthenticationController {
 	AuthenticationService authenticationService;
 
-	@PostMapping("/token/get")
+	@PostMapping("/token")
 	public ResponseEntity<ResponseObject> authenticate(@Valid @RequestBody AuthenticationRequest request) {
 		return buildResponse(HttpStatus.OK, "Authenticate successfully.", authenticationService.authenticate(request));
 	}

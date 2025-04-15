@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,6 +22,8 @@ public class UserResponse {
 	String email;
 
 	String role;
+
+	LocalDate dateOfBirth;
 
 	Instant preniumExpiry;
 
