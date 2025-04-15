@@ -16,4 +16,7 @@ public interface FavoriteCategoryRepository extends JpaRepository<FavoriteCatego
     // Lấy danh sách categoryId từ FavoriteCategory theo userId
     @Query("SELECT fc.category.id FROM FavoriteCategory fc WHERE fc.user.id = :userId")
     List<UUID> findCategoryIdsByUserId(UUID userId);
+
+    boolean existsByUserId(UUID userId);
+
 }
