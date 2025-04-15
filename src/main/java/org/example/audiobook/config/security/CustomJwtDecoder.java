@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
-	TokenService tokenService;
+	final TokenService tokenService;
 
 	@Override
 	public Jwt decode(String accessToken) {

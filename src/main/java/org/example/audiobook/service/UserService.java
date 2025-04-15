@@ -37,13 +37,13 @@ public class UserService {
 	}
 
 	public UserResponse getMyInfo() {
-		// Get context
-		SecurityContext context = SecurityContextHolder.getContext();
-		String username = context.getAuthentication().getName();
-		// Fetch
+		String userIdStr = SecurityContextHolder.getContext().getAuthentication().getName();
+		UUID userId = UUID.fromString(userIdStr);
+
 		User user = userRepository
-				.findByUsername(username)
+				.findById(userId)
 				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
 		// Return
 		return userMapper.toUserResponse(user);
 	}
