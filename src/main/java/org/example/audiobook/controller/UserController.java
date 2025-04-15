@@ -18,7 +18,7 @@ import static org.example.audiobook.helper.ResponseBuilder.buildResponse;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 	UserService userService;
 
