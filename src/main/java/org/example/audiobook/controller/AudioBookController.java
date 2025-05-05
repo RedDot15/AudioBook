@@ -28,6 +28,14 @@ public class AudioBookController {
         return buildResponse(org.springframework.http.HttpStatus.OK, "Get all audiobooks successfully", response);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<ResponseObject> getBySearch(@RequestParam String searchTxt,@RequestParam(defaultValue = "1") int page,
+                                                      @RequestParam(defaultValue = "10") int size){
+
+        PageResponse<AudioBookResponse> response = audioBookService.getBySearch(searchTxt, page, size);
+        return buildResponse(org.springframework.http.HttpStatus.OK, "Get all audiobooks successfully", response);
+    }
+
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<ResponseObject> getByCategoryId(
             @PathVariable UUID categoryId,

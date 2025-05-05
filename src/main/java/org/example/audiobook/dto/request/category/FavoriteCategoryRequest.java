@@ -13,7 +13,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FavoriteCategoryRequest {
-    @NotNull(message = "userId cannot be null")
     private UUID userId;
 
     @NotEmpty(message = "categories cannot be empty")
