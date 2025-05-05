@@ -178,13 +178,27 @@ public class FavoriteCategoryService {
         }
     }
 
-    public ResponseObject checkUserHasFavorites(UUID userId) {
+    public ResponseObject checkUserHasFavorites(String userId) {
+        if (userId == null || userId.trim().isEmpty()) {
+            return new ResponseObject(
+                    "error",
+                    "User ID cannot be null or empty",
+                    null
+            );
+        }
+
         try {
-            boolean exists = favoriteCategoryRepository.existsByUserId(userId);
+            boolean exists = favoriteCategoryRepository.existsByUserId(UUID.fromString(userId));
             return new ResponseObject(
                     "success",
                     "Check completed",
                     exists
+            );
+        } catch (IllegalArgumentException e) {
+            return new ResponseObject(
+                    "error",
+                    "Invalid user ID format: " + e.getMessage(),
+                    null
             );
         } catch (Exception e) {
             return new ResponseObject(
