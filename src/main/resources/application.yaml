@@ -37,6 +37,11 @@ spring:
   config:
     import: env.properties
 
+cloudinary:
+  cloud_name: ${CLOUD_NAME}
+  api_key: ${API_KEY}
+  api_secret: ${API_SECRET}
+
 jwt:
   signer-key: ${SIGNER_KEY}
   valid-duration: 3600 # in second
