@@ -1,4 +1,4 @@
-package org.example.audiobook.service.audiobook;
+package org.example.audiobook.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.audiobook.dto.response.AudioBookResponse;
@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AudioBookServiceImpl implements AudioBookService {
+public class AudioBookService {
 
     private final AudioBookRepository audioBookRepository;
     private final AudioBookMapper audioBookMapper;
 
-    @Override
+
     public PageResponse<AudioBookResponse> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<AudioBook> audioBookPage = audioBookRepository.findAll(pageable);
@@ -32,7 +32,14 @@ public class AudioBookServiceImpl implements AudioBookService {
         return buildPageResponse(audioBookPage);
     }
 
-    @Override
+    public PageResponse<AudioBookResponse> getBySearch(String search, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<AudioBook> audioBookPage = audioBookRepository.findBySearch(search, pageable);
+
+        return buildPageResponse(audioBookPage);
+    }
+
+
     public PageResponse<AudioBookResponse> getByCategoryId(UUID categoryId, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<AudioBook> audioBookPage = audioBookRepository.findByCategoryId(categoryId, pageable);
@@ -43,7 +50,6 @@ public class AudioBookServiceImpl implements AudioBookService {
         return buildPageResponse(audioBookPage);
     }
 
-    @Override
     public PageResponse<AudioBookResponse> getByUserId(UUID userId, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<AudioBook> audioBookPage = audioBookRepository.findByUserId(userId, pageable);
@@ -54,7 +60,6 @@ public class AudioBookServiceImpl implements AudioBookService {
         return buildPageResponse(audioBookPage);
     }
 
-    @Override
     public AudioBookResponse getById(UUID id) {
         AudioBook audioBook = audioBookRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.AUDIO_BOOK_NOT_FOUND));

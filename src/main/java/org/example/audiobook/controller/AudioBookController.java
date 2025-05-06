@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.audiobook.dto.response.AudioBookResponse;
 import org.example.audiobook.dto.response.PageResponse;
 import org.example.audiobook.helper.ResponseObject;
-import org.example.audiobook.service.audiobook.AudioBookService;
+import org.example.audiobook.service.AudioBookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +25,14 @@ public class AudioBookController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         PageResponse<AudioBookResponse> response = audioBookService.getAll(page, size);
+        return buildResponse(org.springframework.http.HttpStatus.OK, "Get all audiobooks successfully", response);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ResponseObject> getBySearch(@RequestParam String searchTxt,@RequestParam(defaultValue = "1") int page,
+                                                      @RequestParam(defaultValue = "10") int size){
+
+        PageResponse<AudioBookResponse> response = audioBookService.getBySearch(searchTxt, page, size);
         return buildResponse(org.springframework.http.HttpStatus.OK, "Get all audiobooks successfully", response);
     }
 
