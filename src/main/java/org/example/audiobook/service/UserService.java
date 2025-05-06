@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -62,24 +63,24 @@ public class UserService {
 		}
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
-	public UserResponse update(UserUpdateRequest userUpdateRequest) {
-		// Get old
-		User foundUser = userRepository
-				.findById(userUpdateRequest.getId())
-				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-		// Update
-		userMapper.updateUser(foundUser, userUpdateRequest);
-		// Update password
-		if (userUpdateRequest.getPassword() != null)
-			foundUser.setHashedPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
-		try {
-			// Add & Return
-			return userMapper.toUserResponse(userRepository.save(foundUser));
-		} catch (DataIntegrityViolationException exception) {
-			throw new AppException(ErrorCode.USER_DUPLICATE);
-		}
-	}
+//	@PreAuthorize("hasRole('ADMIN')")
+//	public UserResponse update(UserUpdateRequest userUpdateRequest) {
+//		// Get old
+//		User foundUser = userRepository
+//				.findById(userUpdateRequest.getId())
+//				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+//		// Update
+//		userMapper.updateUser(foundUser, userUpdateRequest);
+//		// Update password
+//		if (userUpdateRequest.getPassword() != null)
+//			foundUser.setHashedPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
+//		try {
+//			// Add & Return
+//			return userMapper.toUserResponse(userRepository.save(foundUser));
+//		} catch (DataIntegrityViolationException exception) {
+//			throw new AppException(ErrorCode.USER_DUPLICATE);
+//		}
+//	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasAuthority('DELETE_USER')")
 	public UUID delete(UUID id) {
@@ -135,5 +136,22 @@ public class UserService {
 		foundUser.setHashedPassword(passwordEncoder.encode(userChangePasswordRequest.getPassword()));
 		// Save & Return
 		return userMapper.toUserResponse(userRepository.save(foundUser));
+	}
+
+	public User updateUser(UUID id, UserUpdateRequest userUpdateRequest){
+		User userResult = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+		if(userUpdateRequest.getDisplayName() != null && !userUpdateRequest.getDisplayName().isEmpty()){
+			userResult.setDisplayName(userUpdateRequest.getDisplayName());
+		}
+		if(userUpdateRequest.getUsername() != null && !userUpdateRequest.getUsername().isEmpty()){
+			userResult.setUsername(userUpdateRequest.getUsername());
+		}
+		if(userUpdateRequest.getDateOfBirth() != null && userUpdateRequest.getDateOfBirth().isBefore(LocalDate.now())){
+			userResult.setDateOfBirth(userUpdateRequest.getDateOfBirth());
+		}
+		if(userUpdateRequest.getImageUrl() != null && !userUpdateRequest.getImageUrl().isEmpty()){
+			userResult.setImageUrl(userUpdateRequest.getImageUrl());
+		}
+		return  userRepository.save(userResult);
 	}
 }
