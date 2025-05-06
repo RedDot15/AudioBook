@@ -41,6 +41,12 @@ public class User {
     @Column(name = "date_of_birth")
     LocalDate dateOfBirth;
 
+    @Column(name = "image_url")
+    String imageUrl;
+
+    @Column(name = "display_name")
+    String displayName;
+
     @Column(name = "prenium_expiry")
     Instant preniumExpiry;
 
