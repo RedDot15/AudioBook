@@ -1,7 +1,9 @@
 // AudioBookController.java
 package org.example.audiobook.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.audiobook.dto.AudioBookRequest;
 import org.example.audiobook.dto.response.AudioBookResponse;
 import org.example.audiobook.dto.response.PageResponse;
 import org.example.audiobook.helper.ResponseObject;
@@ -64,5 +66,18 @@ public class AudioBookController {
                 "Get audiobooks by user successfully", response);
     }
 
+    @PostMapping("create")
+    public ResponseEntity<AudioBookRequest> createAudioBook(@Valid @RequestBody AudioBookRequest audioBookRequest) {
+        AudioBookRequest createdAudioBook = audioBookService.createAudioBook(audioBookRequest);
+        return ResponseEntity.ok(createdAudioBook);
+    }
+
+    @PostMapping("/update/{id}")
+    public ResponseEntity<AudioBookRequest> updateAudioBook(
+            @PathVariable UUID id,
+            @Valid @RequestBody AudioBookRequest audioBookRequest) {
+        AudioBookRequest updatedAudioBook = audioBookService.updateAudioBook(id, audioBookRequest);
+        return ResponseEntity.ok(updatedAudioBook);
+    }
 
 }
