@@ -28,5 +28,4 @@ public class UserUpdateRequest {
     private LocalDate dateOfBirth;
     private String imageUrl;
 
-
 }

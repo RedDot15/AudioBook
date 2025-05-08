@@ -34,7 +34,8 @@ public class SecurityConfig {
 	String[] PUBLIC_ENDPOINTS = {
 		"/api/**",
 		"/images/**",
-		"/audio/**"
+		"/audio/**",
+			"/api/user/update/**"
 	};
 
 	@NonFinal
