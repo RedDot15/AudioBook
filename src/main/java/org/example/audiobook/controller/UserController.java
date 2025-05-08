@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -82,6 +81,7 @@ public class UserController {
 			 @ModelAttribute UserUpdateRequest userUpdateRequest
 			) {
 		try{
+			System.out.println(userUpdateRequest);
 			Optional.ofNullable(userUpdateRequest.getFile())
 					.filter(f -> !f.isEmpty())
 					.ifPresent(f -> {
@@ -101,6 +101,17 @@ public class UserController {
 			return  ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getUser(@PathVariable String id) {
+		try{
+			User user = userService.getUser(UUID.fromString(id));
+			return ResponseEntity.ok(user);
+		}catch (Exception e){
+			return  ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+
 
 
 
