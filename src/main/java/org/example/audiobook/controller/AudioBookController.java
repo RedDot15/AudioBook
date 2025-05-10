@@ -3,13 +3,18 @@ package org.example.audiobook.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.audiobook.dto.AudioBookRequest;
+import org.example.audiobook.dto.request.audiobook.AudioBookCreateRequest;
 import org.example.audiobook.dto.response.AudioBookResponse;
 import org.example.audiobook.dto.response.PageResponse;
 import org.example.audiobook.helper.ResponseObject;
 import org.example.audiobook.service.AudioBookService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -22,12 +27,50 @@ public class AudioBookController {
 
     private final AudioBookService audioBookService;
 
+    private UUID getUserIdFromAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
+        // Lấy Jwt từ principal
+        if (!(authentication.getPrincipal() instanceof Jwt)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid JWT principal");
+        }
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        // Lấy claim uid
+        String uid = jwt.getClaimAsString("uid");
+        if (uid == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing uid claim in token");
+        }
+        try {
+            return UUID.fromString(uid);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user ID in token");
+        }
+    }
+
     @GetMapping("/")
     public ResponseEntity<ResponseObject> getAll(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         PageResponse<AudioBookResponse> response = audioBookService.getAll(page, size);
         return buildResponse(org.springframework.http.HttpStatus.OK, "Get all audiobooks successfully", response);
+    }
+
+    @GetMapping("/recommend")
+    public ResponseEntity<ResponseObject> getRecommended(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size){
+        UUID userId = getUserIdFromAuthentication();
+        PageResponse<AudioBookResponse> response = audioBookService.getByCategoryIds(userId, page, size);
+        return buildResponse(org.springframework.http.HttpStatus.OK, "Get recommended audiobooks successfully", response);
+    }
+
+    @GetMapping("/new-release")
+    public ResponseEntity<ResponseObject> getNewRelease(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        PageResponse<AudioBookResponse> response = audioBookService.getAllByPublishedYearDesc(page, size);
+        return buildResponse(org.springframework.http.HttpStatus.OK, "Get new release audiobooks successfully", response);
     }
 
     @GetMapping("/search")
@@ -67,17 +110,21 @@ public class AudioBookController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<AudioBookRequest> createAudioBook(@Valid @RequestBody AudioBookRequest audioBookRequest) {
-        AudioBookRequest createdAudioBook = audioBookService.createAudioBook(audioBookRequest);
-        return ResponseEntity.ok(createdAudioBook);
+    public ResponseEntity<ResponseObject> createAudioBook(@Valid @RequestBody AudioBookCreateRequest audioBookCreateRequest) {
+        UUID userId = getUserIdFromAuthentication();
+        audioBookCreateRequest.setUserId(userId);
+        AudioBookCreateRequest createdAudioBook = audioBookService.createAudioBook(audioBookCreateRequest);
+        return buildResponse(HttpStatus.OK, "Create audiobook by user successfully", createdAudioBook);
     }
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<AudioBookRequest> updateAudioBook(
+    public ResponseEntity<ResponseObject> updateAudioBook(
             @PathVariable UUID id,
-            @Valid @RequestBody AudioBookRequest audioBookRequest) {
-        AudioBookRequest updatedAudioBook = audioBookService.updateAudioBook(id, audioBookRequest);
-        return ResponseEntity.ok(updatedAudioBook);
+            @Valid @RequestBody AudioBookCreateRequest audioBookCreateRequest) {
+        UUID userId = getUserIdFromAuthentication();
+        audioBookCreateRequest.setUserId(userId);
+        AudioBookCreateRequest updatedAudioBook = audioBookService.updateAudioBook(id, audioBookCreateRequest);
+        return buildResponse(HttpStatus.OK, "Create audiobook by user successfully", updatedAudioBook);
     }
 
 }
