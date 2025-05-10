@@ -27,4 +27,5 @@ public interface AudioBookRepository extends JpaRepository<AudioBook, UUID> {
     @Query("SELECT a FROM AudioBook a WHERE LOWER(a.title) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(a.author) LIKE LOWER(CONCAT('%', :search, '%'))")
     Page<AudioBook> findBySearch(@Param("search") String search, Pageable pageable);
 
+    Page<AudioBook> findAllByOrderByPublishedYearDesc(Pageable pageable);
 }

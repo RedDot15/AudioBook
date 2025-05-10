@@ -1,15 +1,16 @@
-package org.example.audiobook.dto;
+package org.example.audiobook.dto.request.audiobook;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AudioBookRequest {
+public class AudioBookCreateRequest {
 
     private UUID id;
 
@@ -50,6 +51,9 @@ public class AudioBookRequest {
     @NotNull(message = "Category ID is required")
     private UUID categoryId;
 
-    @NotNull(message = "User ID is required")
     private UUID userId;
+
+    // Danh sách các chương
+    @NotNull(message = "Chapters are required")
+    private List<ChapterRequest> chapters;
 }
