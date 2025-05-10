@@ -21,7 +21,7 @@ public enum ErrorCode {
 	UNAUTHORIZED(HttpStatus.FORBIDDEN, "You do not have permission to perform this operation."),
 	// Audio Book
 	AUDIO_BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "Audio book not found."),
-	;
+    INVALID_CATEGORY_IDS(HttpStatus.FORBIDDEN, "Invalid category ids." ), CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "Category not found");
 
 	HttpStatus httpStatus;
 	String message;
