@@ -13,4 +13,5 @@ public interface BookChapterRepository extends JpaRepository<BookChapter, UUID> 
 
     List<BookChapter> findAllByAudioBook(AudioBook audioBook);
 
+    void deleteByAudioBookId(UUID id);
 }
