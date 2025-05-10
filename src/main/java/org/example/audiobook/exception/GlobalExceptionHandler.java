@@ -44,33 +44,33 @@ public class GlobalExceptionHandler {
         return buildResponse(errorCode.getHttpStatus(), errorCode.getMessage(), null);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseObject> handleValidationException(MethodArgumentNotValidException ex) {
-        List<ValidationResponse> validationResponseSet = ex.getBindingResult().getAllErrors().stream()
-                .map(error -> {
-                    Map<String, Object> attributes = error.unwrap(ConstraintViolation.class)
-                            .getConstraintDescriptor()
-                            .getAttributes();
-                    if (error instanceof FieldError) {
-                        FieldError fieldError = (FieldError) error;
-                        return new ValidationResponse(
-                                fieldError.getField(),
-                                Objects.nonNull(attributes)
-                                        ? mapAttribute(
-                                        Objects.requireNonNull(fieldError.getDefaultMessage()), attributes)
-                                        : fieldError.getDefaultMessage());
-                    } else { // Handle ObjectError (class-level constraints)
-                        String[] fields = (String[]) attributes.get(FIELDS_ATTRIBUTE);
-                        return new ValidationResponse(
-                                Arrays.asList(fields),
-                                Objects.nonNull(attributes)
-                                        ? mapAttribute(Objects.requireNonNull(error.getDefaultMessage()), attributes)
-                                        : error.getDefaultMessage());
-                    }
-                })
-                .collect(Collectors.toList());
-        return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed.", validationResponseSet);
-    }
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<ResponseObject> handleValidationException(MethodArgumentNotValidException ex) {
+//        List<ValidationResponse> validationResponseSet = ex.getBindingResult().getAllErrors().stream()
+//                .map(error -> {
+//                    Map<String, Object> attributes = error.unwrap(ConstraintViolation.class)
+//                            .getConstraintDescriptor()
+//                            .getAttributes();
+//                    if (error instanceof FieldError) {
+//                        FieldError fieldError = (FieldError) error;
+//                        return new ValidationResponse(
+//                                fieldError.getField(),
+//                                Objects.nonNull(attributes)
+//                                        ? mapAttribute(
+//                                        Objects.requireNonNull(fieldError.getDefaultMessage()), attributes)
+//                                        : fieldError.getDefaultMessage());
+//                    } else { // Handle ObjectError (class-level constraints)
+//                        String[] fields = (String[]) attributes.get(FIELDS_ATTRIBUTE);
+//                        return new ValidationResponse(
+//                                Arrays.asList(fields),
+//                                Objects.nonNull(attributes)
+//                                        ? mapAttribute(Objects.requireNonNull(error.getDefaultMessage()), attributes)
+//                                        : error.getDefaultMessage());
+//                    }
+//                })
+//                .collect(Collectors.toList());
+//        return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed.", validationResponseSet);
+//    }
 
     private String mapAttribute(String message, Map<String, Object> attributes) {
         String minValue = String.valueOf(attributes.get(MIN_ATTRIBUTE));
