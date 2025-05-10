@@ -154,4 +154,8 @@ public class UserService {
 		}
 		return  userRepository.save(userResult);
 	}
+
+	public User getUser(UUID id){
+		return  userRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+	}
 }
