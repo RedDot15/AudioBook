@@ -50,6 +50,9 @@ public class User {
     @Column(name = "prenium_expiry")
     Instant preniumExpiry;
 
+    @Column(name="fcm_token")
+    String fcmToken;
+
     @Column(name = "prenium_status", nullable = false)
     Boolean preniumStatus;
 

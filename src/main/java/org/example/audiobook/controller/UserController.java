@@ -111,10 +111,13 @@ public class UserController {
 		}
 	}
 
-
-
-
-
-
-
+	@PutMapping("/fcm-token")
+	public ResponseEntity<?> updateFcmToken(@RequestBody UpdateFcmToken updateFcmToken){
+		try{
+			User user = userService.updateFcmToken(UUID.fromString(updateFcmToken.getUserId()), updateFcmToken.getFcmToken());
+			return ResponseEntity.ok(user);
+		}catch (Exception e){
+			return  ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 }

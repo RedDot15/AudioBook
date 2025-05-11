@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -157,5 +158,15 @@ public class UserService {
 
 	public User getUser(UUID id){
 		return  userRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+	}
+
+	public User updateFcmToken(UUID id, String fcmToken){
+		User userResult = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+		userResult.setFcmToken(fcmToken);
+		return  userRepository.save(userResult);
+	}
+
+	public List<User> findUsersWithFCMToken() {
+		return userRepository.findByFcmTokenIsNotNull();
 	}
 }
