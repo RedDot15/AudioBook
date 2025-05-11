@@ -1,0 +1,29 @@
+package org.example.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.example.service.FCMTokenService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/fcm-tokens")
+@RequiredArgsConstructor
+public class FCMTokenController {
+
+    private final FCMTokenService fcmTokenService;
+
+    @PostMapping("/register")
+    public ResponseEntity<String> registerToken(
+            @RequestParam String userId,
+            @RequestParam String token) {
+        fcmTokenService.saveToken(userId, token);
+        return ResponseEntity.ok("Token registered successfully");
+    }
+
+    @DeleteMapping("/unregister")
+    public ResponseEntity<String> unregisterToken(
+            @RequestParam String userId) {
+        fcmTokenService.removeToken(userId);
+        return ResponseEntity.ok("Token unregistered successfully");
+    }
+} 

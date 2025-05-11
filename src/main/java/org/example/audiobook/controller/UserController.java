@@ -5,12 +5,16 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.example.audiobook.dto.request.user.*;
+import org.example.audiobook.entity.User;
 import org.example.audiobook.helper.ResponseObject;
 import org.example.audiobook.service.UserService;
+import org.example.audiobook.service.cloudinary.CloudinaryService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.example.audiobook.helper.ResponseBuilder.buildResponse;
@@ -18,9 +22,10 @@ import static org.example.audiobook.helper.ResponseBuilder.buildResponse;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 	UserService userService;
+	CloudinaryService cloudinaryService;
 
 	@GetMapping("/list/all")
 	public ResponseEntity<ResponseObject> showAll() {
@@ -41,12 +46,6 @@ public class UserController {
 		return buildResponse(HttpStatus.OK, "Created new user successfully.", userService.add(userCreateRequest));
 	}
 
-	@PutMapping("/update")
-	public ResponseEntity<ResponseObject> update(
-			@Valid @RequestBody UserUpdateRequest userUpdateRequest) {
-		// Update & Return
-		return buildResponse(HttpStatus.OK, "Updated user successfully.", userService.update(userUpdateRequest));
-	}
 
 	@DeleteMapping(value = "/{userId}/delete")
 	public ResponseEntity<ResponseObject> delete(@PathVariable UUID userId) {
@@ -74,5 +73,51 @@ public class UserController {
 			@Valid @RequestBody UserChangePasswordRequest userChangePasswordRequest) {
 		// Update & Return user
 		return buildResponse(HttpStatus.OK, "Changed password successfully.", userService.changePassword(userChangePasswordRequest));
+	}
+
+	@PutMapping(value = "/update/{id}",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<?> updateUser
+			(@PathVariable String id,
+			 @ModelAttribute UserUpdateRequest userUpdateRequest
+			) {
+		try{
+			System.out.println(userUpdateRequest);
+			Optional.ofNullable(userUpdateRequest.getFile())
+					.filter(f -> !f.isEmpty())
+					.ifPresent(f -> {
+                        String imageUrl = null;
+                        try {
+                            imageUrl = cloudinaryService
+                                    .uploadFile(f)
+                                    .getFilePath();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                        userUpdateRequest.setImageUrl(imageUrl);
+					});
+			User updatedUser = userService.updateUser(UUID.fromString(id), userUpdateRequest);
+			return ResponseEntity.ok(updatedUser);
+		}catch (Exception e){
+			return  ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getUser(@PathVariable String id) {
+		try{
+			User user = userService.getUser(UUID.fromString(id));
+			return ResponseEntity.ok(user);
+		}catch (Exception e){
+			return  ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+	@PutMapping("/fcm-token")
+	public ResponseEntity<?> updateFcmToken(@RequestBody UpdateFcmToken updateFcmToken){
+		try{
+			User user = userService.updateFcmToken(UUID.fromString(updateFcmToken.getUserId()), updateFcmToken.getFcmToken());
+			return ResponseEntity.ok(user);
+		}catch (Exception e){
+			return  ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 }

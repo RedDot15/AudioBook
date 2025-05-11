@@ -10,17 +10,28 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AudioBookResponseDTO {
+public class AudioBookResponse {
     UUID id;
+
     String title;
+
     String author;
+
     Integer publishedYear;
+
     String description;
+
     String coverImage;
+
     Boolean isFree;
+
     Integer duration;
+
     String femaleAudioUrl;
+
     String maleAudioUrl;
-    UUID categoryId;
+
+    CategoryResponse categoryResponse;
+
     UUID userId;
 }

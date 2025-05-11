@@ -24,6 +24,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Objects;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -55,7 +56,7 @@ public class TokenService {
 		Date expirationTime = Date.from(Instant.now().plus(duration, ChronoUnit.SECONDS));
 		// Define Body: ClaimSet
 		JWTClaimsSet.Builder claimsBuilder = new JWTClaimsSet.Builder()
-				.subject(user.getUsername())
+				.subject(user.getId().toString())
 				.issuer("reddot15.com")
 				.issueTime(new Date())
 				.expirationTime(expirationTime)
@@ -92,7 +93,10 @@ public class TokenService {
 			if (Objects.isNull(tokenId) || invalidatedTokenRepository.existsById(tokenId)) {
 				throw new JwtException("Invalid token");
 			}
-			if (userRepository.findByUsername(jwt.getSubject()).isEmpty()) throw new JwtException("Invalid user");
+			UUID userId = UUID.fromString(jwt.getSubject());
+			if (userRepository.findById(userId).isEmpty()) {
+				throw new JwtException("Invalid user");
+			}
 			// Return jwt
 			return jwt;
 		} catch (JwtException e) {

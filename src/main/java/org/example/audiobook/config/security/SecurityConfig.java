@@ -32,11 +32,10 @@ import javax.crypto.spec.SecretKeySpec;
 public class SecurityConfig {
 
 	String[] PUBLIC_ENDPOINTS = {
-		"/auth/token/get",
-			"/api/audiobooks/getAll",
-			"api/category/getAll",
-			"/images/**",
-			"/audio/**"
+		"/api/**",
+		"/images/**",
+		"/audio/**",
+			"/api/user/update/**"
 	};
 
 	@NonFinal

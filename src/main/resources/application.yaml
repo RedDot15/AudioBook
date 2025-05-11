@@ -7,6 +7,10 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER}
+  flyway:
+    locations: classpath:/db/migration,classpath:/dev/db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
   # Hibernate settings (optional)
   jpa:
     show-sql: true
@@ -32,6 +36,14 @@ spring:
       enabled: true
   config:
     import: env.properties
+
+cloudinary:
+  cloud_name: ${CLOUD_NAME}
+  api_key: ${API_KEY}
+  api_secret: ${API_SECRET}
+
+firebase:
+  credential-file: firebase-service-account.json
 
 jwt:
   signer-key: ${SIGNER_KEY}
