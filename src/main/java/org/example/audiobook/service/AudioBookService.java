@@ -46,6 +46,13 @@ public class AudioBookService {
         return buildPageResponse(audioBookPage);
     }
 
+    public PageResponse<AudioBookResponse> getBySearchWithUser(UUID userId, String search, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<AudioBook> audioBookPage = audioBookRepository.findByTextsearchAndUserId(search, userId,  pageable);
+
+        return buildPageResponse(audioBookPage);
+    }
+
     public PageResponse<AudioBookResponse> getByCategoryId(UUID categoryId, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<AudioBook> audioBookPage = audioBookRepository.findByCategoryId(categoryId, pageable);
@@ -183,5 +190,13 @@ public class AudioBookService {
 
         return audioBookCreateRequest;
     }
+    @Transactional
+    public void deleteAudioBook(UUID id) {
+        // Tìm AudioBook
+        AudioBook audioBook = audioBookRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.AUDIO_BOOK_NOT_FOUND));
 
+        // Xóa AudioBook
+        audioBookRepository.delete(audioBook);
+    }
 }
