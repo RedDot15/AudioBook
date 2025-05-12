@@ -40,12 +40,10 @@ public class AudioBookCreateRequest {
     @Positive(message = "Duration must be positive")
     private Integer duration;
 
-    @NotBlank(message = "Female audio URL is required")
-    @Size(max = 125, message = "Female audio URL must be less than 125 characters")
+    @Size(max = 1000, message = "Female audio URL must be less than 125 characters")
     private String femaleAudioUrl;
 
-    @NotBlank(message = "Male audio URL is required")
-    @Size(max = 125, message = "Male audio URL must be less than 125 characters")
+    @Size(max = 1000, message = "Male audio URL must be less than 125 characters")
     private String maleAudioUrl;
 
     @NotNull(message = "Category ID is required")
@@ -53,7 +51,6 @@ public class AudioBookCreateRequest {
 
     private UUID userId;
 
-    // Danh sách các chương
-    @NotNull(message = "Chapters are required")
-    private List<ChapterRequest> chapters;
+    @NotNull(message = "Textcontent are required")
+    private String textContent;
 }
