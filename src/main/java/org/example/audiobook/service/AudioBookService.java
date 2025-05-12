@@ -6,7 +6,6 @@ import org.example.audiobook.dto.request.audiobook.AudioBookCreateRequest;
 import org.example.audiobook.dto.response.AudioBookResponse;
 import org.example.audiobook.dto.response.PageResponse;
 import org.example.audiobook.entity.AudioBook;
-import org.example.audiobook.entity.BookChapter;
 import org.example.audiobook.entity.Category;
 import org.example.audiobook.entity.User;
 import org.example.audiobook.exception.custom.AppException;
@@ -31,7 +30,6 @@ public class AudioBookService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final FavoriteCategoryRepository favoriteCategoryRepository;
-    private final BookChapterRepository bookChapterRepository;
 
 
     public PageResponse<AudioBookResponse> getAll(int page, int size) {
@@ -132,6 +130,7 @@ public class AudioBookService {
                 .title(audioBookRequest.getTitle())
                 .author(audioBookRequest.getAuthor())
                 .publishedYear(audioBookRequest.getPublishedYear())
+                .textContent(audioBookRequest.getTextContent())
                 .description(audioBookRequest.getDescription())
                 .coverImage(audioBookRequest.getCoverImage())
                 .isFree(audioBookRequest.getIsFree())
@@ -144,19 +143,6 @@ public class AudioBookService {
 
         // Lưu AudioBook
         audioBook = audioBookRepository.save(audioBook);
-
-        // Tạo và lưu các BookChapter
-        AudioBook finalAudioBook = audioBook;
-        List<BookChapter> chapters = audioBookRequest.getChapters().stream()
-                .map(chapterRequest -> BookChapter.builder()
-                        .title(chapterRequest.getTitle())
-                        .chapterNumber(chapterRequest.getChapterNumber())
-                        .textContent(chapterRequest.getTextContent())
-                        .audioBook(finalAudioBook)
-                        .build())
-                .collect(Collectors.toList());
-
-        bookChapterRepository.saveAll(chapters);
 
         // Cập nhật ID cho AudioBookRequest
         audioBookRequest.setId(audioBook.getId());
@@ -187,23 +173,10 @@ public class AudioBookService {
         audioBook.setDuration(audioBookCreateRequest.getDuration());
         audioBook.setFemaleAudioUrl(audioBookCreateRequest.getFemaleAudioUrl());
         audioBook.setMaleAudioUrl(audioBookCreateRequest.getMaleAudioUrl());
+        audioBook.setTextContent(audioBookCreateRequest.getTextContent());
         audioBook.setCategory(category);
+
         audioBook.setUser(user);
-
-        // Xóa các BookChapter cũ
-        bookChapterRepository.deleteByAudioBookId(id);
-
-        // Tạo các BookChapter mới
-        List<BookChapter> chapters = audioBookCreateRequest.getChapters().stream()
-                .map(chapterRequest -> BookChapter.builder()
-                        .title(chapterRequest.getTitle())
-                        .chapterNumber(chapterRequest.getChapterNumber())
-                        .textContent(chapterRequest.getTextContent())
-                        .audioBook(audioBook)
-                        .build())
-                .collect(Collectors.toList());
-
-        bookChapterRepository.saveAll(chapters);
 
         // Lưu AudioBook
         audioBookRepository.save(audioBook);
