@@ -81,6 +81,14 @@ public class AudioBookController {
         return buildResponse(org.springframework.http.HttpStatus.OK, "Get all audiobooks successfully", response);
     }
 
+    @GetMapping("/search-by-user")
+    public ResponseEntity<ResponseObject> getBySearchWithUser(@RequestParam String searchTxt,@RequestParam(defaultValue = "1") int page,
+                                                      @RequestParam(defaultValue = "10") int size){
+        UUID userId = getUserIdFromAuthentication();
+        PageResponse<AudioBookResponse> response = audioBookService.getBySearchWithUser(userId, searchTxt, page, size);
+        return buildResponse(org.springframework.http.HttpStatus.OK, "Get  audiobooks with user successfully", response);
+    }
+
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<ResponseObject> getByCategoryId(
             @PathVariable UUID categoryId,
@@ -91,11 +99,11 @@ public class AudioBookController {
                 "Get audiobooks by category successfully", response);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user")
     public ResponseEntity<ResponseObject> getByUserId(
-            @PathVariable UUID userId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
+        UUID userId = getUserIdFromAuthentication();
         PageResponse<AudioBookResponse> response = audioBookService.getByUserId(userId, page, size);
         return buildResponse(org.springframework.http.HttpStatus.OK,
                 "Get audiobooks by user successfully", response);
@@ -127,4 +135,17 @@ public class AudioBookController {
         return buildResponse(HttpStatus.OK, "Create audiobook by user successfully", updatedAudioBook);
     }
 
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<ResponseObject> deleteAudioBook(
+            @PathVariable UUID id) {
+        UUID userId = getUserIdFromAuthentication();
+        // Kiểm tra xem audiobook có thuộc về user hiện tại không (nếu cần)
+        AudioBookResponse audioBook = audioBookService.getById(id);
+        if (!audioBook.getUserId().equals(userId.toString())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this audiobook");
+        }
+
+        audioBookService.deleteAudioBook(id);
+        return buildResponse(HttpStatus.OK, "Delete audiobook successfully", null);
+    }
 }
