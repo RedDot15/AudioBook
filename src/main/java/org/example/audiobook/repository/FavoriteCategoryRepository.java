@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface FavoriteCategoryRepository extends JpaRepository<FavoriteCategory, UUID> {
     // Lấy danh sách FavoriteCategory theo userId với phân trang
     Page<FavoriteCategory> findByUserId(UUID userId, Pageable pageable);
+
     // Lấy danh sách categoryId từ FavoriteCategory theo userId
     @Query("SELECT fc.category.id FROM FavoriteCategory fc WHERE fc.user.id = :userId")
     List<UUID> findCategoryIdsByUserId(UUID userId);

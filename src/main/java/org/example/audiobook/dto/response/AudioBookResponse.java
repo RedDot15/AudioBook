@@ -31,6 +31,8 @@ public class AudioBookResponse {
 
     String maleAudioUrl;
 
+    String textContent;
+
     CategoryResponse categoryResponse;
 
     UUID userId;

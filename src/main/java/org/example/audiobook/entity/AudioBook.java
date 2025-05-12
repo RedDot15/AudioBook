@@ -50,6 +50,9 @@ public class AudioBook {
     @Column(name = "male_audio_url", nullable = false, length = 125)
     String maleAudioUrl;
 
+    @Column(name = "text_content")
+    String textContent;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
@@ -57,5 +60,6 @@ public class AudioBook {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     User user;
+
 
 }
