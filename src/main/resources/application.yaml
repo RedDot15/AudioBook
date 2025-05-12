@@ -42,6 +42,9 @@ cloudinary:
   api_key: ${API_KEY}
   api_secret: ${API_SECRET}
 
+firebase:
+  credential-file: firebase-service-account.json
+
 jwt:
   signer-key: ${SIGNER_KEY}
   valid-duration: 3600 # in second
