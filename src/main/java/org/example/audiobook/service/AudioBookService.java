@@ -48,7 +48,6 @@ public class AudioBookService {
         return buildPageResponse(audioBookPage);
     }
 
-
     public PageResponse<AudioBookResponse> getByCategoryId(UUID categoryId, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<AudioBook> audioBookPage = audioBookRepository.findByCategoryId(categoryId, pageable);
