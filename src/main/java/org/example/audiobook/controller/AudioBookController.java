@@ -141,7 +141,7 @@ public class AudioBookController {
         UUID userId = getUserIdFromAuthentication();
         // Kiểm tra xem audiobook có thuộc về user hiện tại không (nếu cần)
         AudioBookResponse audioBook = audioBookService.getById(id);
-        if (!audioBook.getUserId().equals(userId.toString())) {
+        if (!audioBook.getUserId().toString().equals(userId.toString())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this audiobook");
         }
 
